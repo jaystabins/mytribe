@@ -33,6 +33,7 @@ class User(PermissionsMixin, AbstractBaseUser):
     first_name = models.CharField(max_length=256, blank=True)
     last_name = models.CharField(max_length=256, blank=True)
     user_name = models.CharField(max_length=256, blank=True)
+    email = models.EmailField(unique=True, blank=False, null=False)
     gender = models.CharField(max_length=10, blank=True)
     relationship_status = models.CharField(max_length=256, blank=True)
     bio = models.TextField(blank=True)

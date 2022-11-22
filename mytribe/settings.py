@@ -25,7 +25,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
 
     # mytribe Apps
-    'profiles',
+    'users',
     'comments',
     'posts',
     'images',
@@ -41,7 +41,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'social.urls'
+ROOT_URLCONF = 'mytribe.urls'
 
 TEMPLATES = [
     {
@@ -62,7 +62,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'social.wsgi.application'
+WSGI_APPLICATION = 'mytribe.wsgi.application'
 
 
 
@@ -121,6 +121,8 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = 'user_name'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
+
+AUTH_USER_MODEL = 'users.User'
 
 SITE_ID = 1
 

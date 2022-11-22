@@ -1,0 +1,18 @@
+<div class='container'>
+    <nav>
+        <a href="/"><span class="">NOMAD</span></a>
+        <div class='' id="">
+          <div class="">
+            {% if user.is_authenticated %}
+            <a class="" href="{% url 'account_email' %}">Change E-mail</a>
+            <a class="" href="{% url 'account_logout' %}">Sign Out</a>
+            <a class="" href="{% url 'user-profile' user.id %}">Profile</a>
+            {% else %}
+            <a class="" href="{% url 'account_login' %}">Sign In</a>
+            <a class="" href="{% url 'account_signup' %}">Sign Up</a>
+            {% endif %}
+            <a class="" href="{% url 'post-list' %}">Posts</a>
+          </div>
+        </div>
+    </nav>
+</div>

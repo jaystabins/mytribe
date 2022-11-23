@@ -51,7 +51,6 @@
         {% endif %}
 
         {% if page_obj.has_next %}
-            
             <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
         {% endif %}
         </span>
@@ -68,8 +67,12 @@
 
 
 <script>
+
+    
     $(document).ready(function () {
+
         // catch the form's submit event
+        // This call Sends Ajax Post Requset to new-post
         $('#post_form').submit(function () {
             // create an AJAX call
             $.ajax({
@@ -79,8 +82,41 @@
                 // on success
                 success: function (response) {
                     alert("Thankyou for reaching us out " + response.name);
-                    console.log($("#postdata").val());
+                    // create new element and push to page
+                    var post_data = $("#postdata").val();
                     $("#postdata").val('');
+
+
+
+
+
+
+                    /*
+                    <div class="infinite-item" style="" id='{{ post.id }}'>
+                        <a href='' class="container">  {% comment "" %}{% url "user-profile" post.get_user_profile_id %}{% endcomment %}
+                            <img src="https://www.jea.com/cdn/images/woman-laptop.jpg" class="rounded-circle" style="width: 30px" alt="Avatar" />
+                            {{ post.user }}
+                            <span style="font-size: 0.6em"> posted {{ post.postCreated }}</span>
+                            <br />
+                        </a>
+                        {{ post.post }} 
+                        {% if user.is_authenticated %}
+                            <div class="form-group">
+                                <form action="" method="POST"> {% comment "" %}{% url 'new-comment' %}{% endcomment %}
+                                {% csrf_token %}
+                                <input class="form-control" type="text" name="comment" placeholder="Write a new comment...." />
+                                <input type="hidden" id="postId" name="postId" name="postId" value="{{ post.id }}" />
+                                </form>
+                            </div>
+                        {% endif %}
+                        {% for comment in post.comments.all %} 
+                            {% if comment.parent_id == None %} 
+                                {% include 'comments/comment_component.html' %} 
+                            {% endif %} 
+                        {% endfor %}
+                    </div> 
+                    */
+                    
                 },
                 // on error
                 error: function (response) {
@@ -92,7 +128,8 @@
             return false;
         });
     })
-
+    // infinite scroll
+    // http://imakewebthings.com/waypoints/shortcuts/infinite-scroll/#on-before-page-load-option
     var infinite = new Waypoint.Infinite({
         element: $('.infinite-container')[0]
       })

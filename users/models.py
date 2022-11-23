@@ -5,15 +5,20 @@ from django.utils.translation import gettext_lazy as _
 
 class UserManager(BaseUserManager):
     def create_user(
-        self, email, password=None, is_staff=False, is_active=True, **extra_fields
+        self, email, password=None, is_staff=False, 
+        username=None, is_active=True, **extra_fields
     ):
-        """Create a user instance with the given email and password."""
+        print(username)
         if not email:
             raise ValueError(_('The Email must be set'))
+        if not username:
+            raise ValueError(_('You must enter a Username'))
+        
+        
         email = UserManager.normalize_email(email)
 
         user = self.model(
-            email=email, is_active=is_active, is_staff=is_staff, **extra_fields
+            email=email, is_active=is_active, user_name=username, is_staff=is_staff, **extra_fields
         )
         if password:
             user.set_password(password)
@@ -30,9 +35,9 @@ class UserManager(BaseUserManager):
         return self.get_queryset().filter(is_staff=True)
 
 class User(PermissionsMixin, AbstractBaseUser):
-    first_name = models.CharField(max_length=256, blank=True)
-    last_name = models.CharField(max_length=256, blank=True)
-    user_name = models.CharField(max_length=256, blank=True)
+    first_name = models.CharField(max_length=30, blank=True)
+    last_name = models.CharField(max_length=30, blank=True)
+    user_name = models.CharField(max_length=30, blank=True, unique=True)
     email = models.EmailField(unique=True, blank=False, null=False)
     gender = models.CharField(max_length=10, blank=True)
     relationship_status = models.CharField(max_length=256, blank=True)
@@ -52,9 +57,9 @@ class User(PermissionsMixin, AbstractBaseUser):
     # ########################
     
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ['user_name', 'first_name']
+    REQUIRED_FIELDS = ['user_name']
     
     objects = UserManager()
     
     def __str__(self):
-        return f"{self.user.user_name}'s Profile"
+        return f"{self.user_name}'s Profile"

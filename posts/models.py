@@ -8,7 +8,7 @@ class Post(models.Model):
     post = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     # TODO Implement Image(s) field eventually 
-    is_public = models.BooleanField()
+    is_public = models.BooleanField(default=True)
     update_at = models.DateTimeField(auto_now_add=True)
     created_at = models.DateTimeField(auto_now=True)
 
@@ -17,6 +17,9 @@ class Post(models.Model):
 
     def get_success_url(self):
         return reverse_lazy('post-list', kwargs={'pk': self.object.pk})
+    
+    def __str__(self):
+        return self.user
     
     # TODO - This gets called a TON while viewing any feed
     #       Currently needed to link profile to user on post display

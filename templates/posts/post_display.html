@@ -1,0 +1,101 @@
+<div class="infinite-container">
+    {% if user.is_authenticated %}
+    <div class="form-group">
+        <form id='post_form' action="" method="POST"> {% comment "" %}{% url 'new-post' %}{% endcomment %}  
+        {% csrf_token %}
+            <input id='postdata'class="" type="text" name="post" placeholder="Write a new post...." />
+            <input type='checkbox' checked name='is_public' />
+            <label for="scales">Post Public?</label>
+            <hidden name='user_id' value='{{ user.id }}'/>
+            <input type="submit">
+        </form>
+    </div>
+    {% endif %}
+
+    {% for post in posts %}
+    <div class="infinite-item" style="" id='{{ post.id }}'>
+        <a href='' class="container">  {% comment "" %}{% url "user-profile" post.get_user_profile_id %}{% endcomment %}
+            <img src="https://www.jea.com/cdn/images/woman-laptop.jpg" class="rounded-circle" style="width: 30px" alt="Avatar" />
+            {{ post.user }}
+            <span style="font-size: 0.6em"> posted {{ post.postCreated }}</span>
+            <br />
+        </a>
+        {{ post.post }} 
+        {% if user.is_authenticated %}
+            <div class="form-group">
+                <form action="" method="POST"> {% comment "" %}{% url 'new-comment' %}{% endcomment %}
+                {% csrf_token %}
+                <input class="form-control" type="text" name="comment" placeholder="Write a new comment...." />
+                <input type="hidden" id="postId" name="postId" name="postId" value="{{ post.id }}" />
+                </form>
+            </div>
+        {% endif %}
+        {% for comment in post.comments.all %} 
+            {% if comment.parent_id == None %} 
+                {% include 'comments/comment_component.html' %} 
+            {% endif %} 
+        {% endfor %}
+    </div>
+    {% endfor %}
+    <div class="pagination">
+        <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        {% if page_obj.paginator.num_pages %}
+            <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+        {% endif %}
+
+        {% if page_obj.has_next %}
+            
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+        </span>
+    </div>
+    {% if page_obj.has_next %}
+    <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}">More Content</a>
+    {% endif %}
+    
+</div>
+
+
+
+{% block javascript %}
+
+
+<script>
+    $(document).ready(function () {
+        // catch the form's submit event
+        $('#post_form').submit(function () {
+            // create an AJAX call
+            $.ajax({
+                data: $(this).serialize(), // get the form data
+                type: $(this).attr('method'), // GET or POST
+                url: "{% url 'new-post' %}",
+                // on success
+                success: function (response) {
+                    alert("Thankyou for reaching us out " + response.name);
+                    console.log($("#postdata").val());
+                    $("#postdata").val('');
+                },
+                // on error
+                error: function (response) {
+                    // alert the error if any error occured
+                    alert(response.responseJSON.errors);
+                    console.log(response.responseJSON.errors)
+                }
+            });
+            return false;
+        });
+    })
+
+    var infinite = new Waypoint.Infinite({
+        element: $('.infinite-container')[0]
+      })
+
+</script>
+{% endblock javascript %}

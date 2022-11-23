@@ -31,8 +31,8 @@ class Comment(models.Model):
     def children(self):  # replies
         return Comment.objects.filter(self=self)
 
-    def __str__(self):
-        return self.user %' replied'
+    # def __str__(self):
+    #     return self.user %' replied'
 
     def hasChildren(self):
         if Comment.objects.filter(parent_id=self):

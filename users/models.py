@@ -2,23 +2,24 @@ from django.db import models
 from django.contrib.auth.models import BaseUserManager, PermissionsMixin, AbstractBaseUser
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from django.urls import reverse
 
 class UserManager(BaseUserManager):
     def create_user(
         self, email, password=None, is_staff=False, 
-        username=None, is_active=True, **extra_fields
+        user_name=None, is_active=True, **extra_fields
     ):
-        print(username)
+        
         if not email:
             raise ValueError(_('The Email must be set'))
-        if not username:
+        if not user_name:
             raise ValueError(_('You must enter a Username'))
         
         
         email = UserManager.normalize_email(email)
 
         user = self.model(
-            email=email, is_active=is_active, user_name=username, is_staff=is_staff, **extra_fields
+            email=email, is_active=is_active, user_name=user_name, is_staff=is_staff, **extra_fields
         )
         if password:
             user.set_password(password)
@@ -44,7 +45,7 @@ class User(PermissionsMixin, AbstractBaseUser):
     bio = models.TextField(blank=True)
     current_location = models.CharField(max_length=256, blank=True)
     hometown = models.CharField(max_length=256, blank=True)
-    profile_pic = models.CharField(max_length=256, blank=True)
+    profile_pic = models.ImageField(upload_to='media/images/', default='media/images/blank_profile_pic.png')
     post_public = models.BooleanField(default=True) 
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -63,3 +64,7 @@ class User(PermissionsMixin, AbstractBaseUser):
     
     def __str__(self):
         return f"{self.user_name}'s Profile"
+
+    def get_absolute_url(self):
+        return reverse("user", kwargs={"pk": self.pk})
+    

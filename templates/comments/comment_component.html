@@ -1,5 +1,5 @@
 <div class="container" style="padding-left: 50px">
-    <a href=""> {% comment "" %}{% url 'user-profile' comment.user.id %}{% endcomment %}
+    <a href="{% url 'user' comment.user.id %}"> {% comment "" %}{% endcomment %}
       <img
         src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
         class="rounded-circle"

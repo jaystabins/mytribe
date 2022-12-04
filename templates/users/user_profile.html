@@ -1,0 +1,24 @@
+{% extends 'base.html' %} 
+{% block content %} 
+
+<h1>YO this is the user profile page for : {{ user_data.user_name }}</h1>
+
+{% if request.user.id == user_data.id %}
+    <h3>You can Edit</h3>
+{% endif %}
+
+<div>
+    <span>First Name: {{ user_data.first_name}}</span> <br>
+    <span>Last Name: {{ user_data.last_name}}</span> <br>
+    <span>Email: {{ user_data.email}}</span> <br>
+    <span>Gender: {{ user_data.gender}}</span> <br>
+    <span>Relationship: {{ user_data.relationshiop}}</span> <br>
+    <span>Bio: {{ user_data.bio}}</span> <br>
+    <span>Profile Pic: {{ user_data.profile_pic}}</span> <br>
+    <span>Bio: {{ user_data.bio}}</span> <br>
+    <span>Current Location: {{ user_data.current_location}}</span> <br>
+</div>
+
+
+{% include '../posts/post_display.html' %}
+{% endblock content %}

@@ -14,7 +14,7 @@
 
     {% for post in posts %}
     <div class="infinite-item" style="" id='{{ post.id }}'>
-        <a href='' class="container">  {% comment "" %}{% url "user-profile" post.get_user_profile_id %}{% endcomment %}
+        <a href='{% url "user" post.user.id %}' class="container">  {% comment "" %}{% url "user-profile" post.get_user_profile_id %}{% endcomment %}
             <img src="https://www.jea.com/cdn/images/woman-laptop.jpg" class="rounded-circle" style="width: 30px" alt="Avatar" />
             {{ post.user }}
             <span style="font-size: 0.6em"> posted {{ post.postCreated }}</span>

@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views.generic import DetailView, FormView, UpdateView
 from django.shortcuts import get_object_or_404
 from .models import User
@@ -26,10 +27,13 @@ class UserEditView(UpdateView, LoginRequiredMixin):
     model = User
     template_name = 'users/user_edit.html'
     form_class = UserForm
-    success_url = '/'
 
     def form_valid(self, form):
         return super().form_valid(form)
     
     def get_object(self):
         return self.request.user
+
+    def get_success_url(self):
+        return reverse_lazy('user', kwargs={'pk': self.object.pk})
+

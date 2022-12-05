@@ -1,12 +1,11 @@
 from django.shortcuts import render
-from django.views.generic import CreateView
 from comments.models import Comment
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
 from django.shortcuts import redirect
-
+from django.contrib.auth.decorators import login_required
 
 # TODO Need to error check/sanitize this data Check login ect 
+
+@login_required
 def createComment(request):
 
     if request.POST.get('parentId'):

@@ -12,9 +12,9 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         
         faker = Faker()
-        for _ in range(30):
+        for _ in range(40):
             User.objects.create(
-                user_name=faker.word(),
+                user_name=faker.name(),
                 first_name=faker.word().title(),
                 last_name=faker.word().title(),
                 email= faker.email(),

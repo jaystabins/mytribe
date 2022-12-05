@@ -2,6 +2,7 @@ from django.db import models
 from users.models import User
 from posts.models import Post
 from django.contrib.humanize.templatetags import humanize
+from django.urls import reverse_lazy
 
 
 # TODO Expand on Manager, clean up queries for nested comments
@@ -26,13 +27,13 @@ class Comment(models.Model):
         ordering = ['-created_at']
 
     def get_date(self):
-        return humanize.naturaltime(self.commentCreated)
+        return humanize.naturaltime(self.created_at)
 
     def children(self):  # replies
         return Comment.objects.filter(self=self)
 
-    # def __str__(self):
-    #     return self.user %' replied'
+    def __str__(self):
+        return self.content
 
     def hasChildren(self):
         if Comment.objects.filter(parent_id=self):
@@ -43,3 +44,6 @@ class Comment(models.Model):
         if self.parent is not None:
             return False
         return True
+    
+    def get_success_url(self):
+        return reverse_lazy('main-feed', kwargs={'pk': self.object.pk})

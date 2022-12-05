@@ -1,9 +1,11 @@
 from django.shortcuts import render
-from django.views.generic import DetailView, FormView
+from django.views.generic import DetailView, FormView, UpdateView
 from django.shortcuts import get_object_or_404
 from .models import User
 from posts.models import Post
 from .forms import UserForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 class UserDetailView(DetailView):
@@ -19,10 +21,15 @@ class UserDetailView(DetailView):
         context['posts'] = Post.objects.filter(user_id=self.user.id).order_by('-created_at')
         return context
 
-class UserEditView(FormView):
+
+class UserEditView(UpdateView, LoginRequiredMixin):
+    model = User
     template_name = 'users/user_edit.html'
     form_class = UserForm
     success_url = '/'
 
     def form_valid(self, form):
         return super().form_valid(form)
+    
+    def get_object(self):
+        return self.request.user

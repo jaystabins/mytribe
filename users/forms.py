@@ -4,4 +4,14 @@ from .models import User
 class UserForm(ModelForm):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = [
+            'email',
+            'user_name',
+            'password',
+            'first_name',
+            'last_name',
+            'bio',
+            'profile_pic',
+            'post_public',
+            
+        ]

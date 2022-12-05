@@ -1,20 +1,15 @@
 <div class="container" style="padding-left: 50px">
-    <a href="{% url 'user' comment.user.id %}"> {% comment "" %}{% endcomment %}
-      <img
-        src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-        class="rounded-circle"
-        style="width: 20px"
-        alt="Avatar"
-      />
+    <a href="{% url 'user' comment.user.id %}"> 
+      <img class='profile-pic' src='../{{ MEDIA_URL }}{{ comment.user.profile_pic }}'>
     
     {{ comment.user }}
-    <span style="font-size: 0.6em"> posted on </span>{% comment "" %}{{ comment.get_date }}{% endcomment %}
+    <span style="font-size: 0.6em"> posted on {{ comment.get_date }}</span>
     </a>
     <br />
     {{ comment.content}} 
     {% if user.is_authenticated %}
     <div class="form-group">
-      <form action="" method="POST">{% comment "" %}{% url 'new-comment' %}{% endcomment %}
+      <form action="{% url 'new-comment' %}" method="POST">
         {% csrf_token %}
         <input
           class="form-control"
@@ -34,6 +29,7 @@
           name="parentId"
           value="{{ comment.id }}"
         />
+        <input type='submit' value='Submit' id='{{ post.id }}_btn'>
       </form>
     </div>
     {% endif %}

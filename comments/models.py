@@ -44,6 +44,3 @@ class Comment(models.Model):
         if self.parent is not None:
             return False
         return True
-    
-    def get_success_url(self):
-        return reverse_lazy('main-feed', kwargs={'pk': self.object.pk})

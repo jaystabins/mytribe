@@ -7,16 +7,13 @@ from comments.views import createComment
 from users.views import UserDetailView, UserEditView
 
 urlpatterns = [
-    path('accounts/', include('allauth.urls')),
-    path('admin/', admin.site.urls),
-    
-    path('', PostListVeiw.as_view(), name='main-feed'),
-    path('post/create', PostCreateView.as_view(), name='new-post'),
-    
-    path('posts/createNewComment/', createComment, name='new-comment'),
-
-    path('user/<int:pk>', UserDetailView.as_view(), name='user'),
-    path('user/edit', UserEditView.as_view(), name='user-edit')
+    path("accounts/", include("allauth.urls")),
+    path("admin/", admin.site.urls),
+    path("", PostListVeiw.as_view(), name="main-feed"),
+    path("post/create", PostCreateView.as_view(), name="new-post"),
+    path("posts/createNewComment/", createComment, name="new-comment"),
+    path("user/<int:pk>", UserDetailView.as_view(), name="user"),
+    path("user/edit", UserEditView.as_view(), name="user-edit"),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

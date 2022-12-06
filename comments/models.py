@@ -16,15 +16,13 @@ class CommentManager(models.Manager):
 class Comment(models.Model):
     content = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.ForeignKey(
-        Post, on_delete=models.CASCADE, related_name='comments')
-    parent = models.ForeignKey(
-        'self', blank=True, null=True, related_name='children', on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
+    parent = models.ForeignKey("self", blank=True, null=True, related_name="children", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ["-created_at"]
 
     def get_date(self):
         return humanize.naturaltime(self.created_at)

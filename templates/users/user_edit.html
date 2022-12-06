@@ -1,14 +1,11 @@
-{% extends 'base.html' %}
-
+{% extends 'base.html' %} 
 {% block content %}
 
+<img class="profile-pic" src="../{{ MEDIA_URL }}{{ user.profile_pic }}" />
 
-<img class='profile-pic' src='../{{ MEDIA_URL }}{{ user.profile_pic }}'>
-
-<form method='post' enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit Changes">
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %} {{ form.as_p }}
+  <input type="submit" value="Submit Changes" />
 </form>
 
 {% endblock content %}

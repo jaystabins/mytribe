@@ -7,16 +7,16 @@ from django.core import serializers
 
 
 class PostListVeiw(ListView):
-    template_name = 'posts/post_list.html'
+    template_name = "posts/post_list.html"
     model = Post
-    context_object_name = 'posts'
+    context_object_name = "posts"
     paginate_by = 5
-    queryset = Post.objects.all().prefetch_related('comments').order_by('-created_at')
+    queryset = Post.objects.all().prefetch_related("comments").order_by("-created_at")
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    fields = ['post']
+    fields = ["post"]
 
     def form_valid(self, form):
         form.instance.user = self.request.user

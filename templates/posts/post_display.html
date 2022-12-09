@@ -1,9 +1,9 @@
 <div class="infinite-container">
     {% if user.is_authenticated %}
     <div class="form-group">
-        <form id='post_form' action="" method="POST"> {% comment "" %}{% url 'new-post' %}{% endcomment %}  
+        <form id='post_form' action="{% url 'new-post' %}" method="POST">  
         {% csrf_token %}
-            <input id='postdata'class="" type="text" name="post" placeholder="Write a new post...." />
+            <textarea class='post-textarea' id='postdata'class="" type="text" name="post" placeholder="Write a new post...." /></textarea>
             <input type='checkbox' checked name='is_public' />
             <label for="scales">Post Public?</label>
             <hidden name='user_id' value='{{ user.id }}'/>
@@ -14,12 +14,21 @@
 
     {% for post in posts %}
     <div class="infinite-item" style="" id='{{ post.id }}'>
-        <a href='{% url "user" post.user.id %}' class="container">  {% comment "" %}{% url "user-profile" post.get_user_profile_id %}{% endcomment %}
-            <img class='profile-pic' src='../{{ MEDIA_URL }}{{ post.user.profile_pic }}'>
-            {{ post.user }}
-            <span style="font-size: 0.6em"> posted {{ post.postCreated }}</span>
-            <br />
-        </a>
+        <div class='post-display-user'>
+            <a href='{% url "user" post.user.id %}' class="container">
+                <img class='profile-pic' src='../{{ MEDIA_URL }}{{ post.user.profile_pic }}'>
+                {{ post.user }}
+                <span style="font-size: 0.6em"> posted {{ post.get_date }}</span>
+            </a>
+            {% if request.user.id == post.user.id %}
+            <div class='post-delete-form'>
+                <form id="my_form" method="POST" action="{% url 'post-delete' post.id %}">
+                    {% csrf_token %}
+                </form>
+                <small><a href="#" onclick="document.getElementById('my_form').submit();">Delete?</a></small>
+            </div>
+            {% endif %}
+        </div>
         {{ post.post }} 
         {% if user.is_authenticated %}
             <div class="form-group">
@@ -40,7 +49,7 @@
     {% endfor %}
 
     {% if page_obj.has_next %}
-    <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}">More Content</a>
+    <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}"> </a>
     {% endif %}
     
 </div>
@@ -57,7 +66,7 @@
 
         // catch the form's submit event
         // This call Sends Ajax Post Requset to new-post
-        $('#post_form').submit(function () {
+        $('#TURNED_OFF_post_form').submit(function () {
             // create an AJAX call
             $.ajax({
                 data: $(this).serialize(), // get the form data

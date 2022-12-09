@@ -1,42 +1,49 @@
 <div class="container" style="padding-left: 50px">
     <a href="{% url 'user' comment.user.id %}"> 
       <img class='profile-pic' src='../{{ MEDIA_URL }}{{ comment.user.profile_pic }}'>
-    
-    {{ comment.user }}
-    <span style="font-size: 0.6em"> posted on {{ comment.get_date }}</span>
-    </a>
-    <br />
-    {{ comment.content}} 
-    {% if user.is_authenticated %}
-    <div class="form-group">
-      <form action="{% url 'new-comment' %}" method="POST">
-        {% csrf_token %}
-        <input
-          class="form-control"
-          type="text"
-          name="comment"
-          placeholder="Reply to the comment above...."
-        />
-        <input
-          type="hidden"
-          id="postId"
-          name="postId"
-          value="{{ post.id }}"
-        />
-        <input
-          type="hidden"
-          id="parentId"
-          name="parentId"
-          value="{{ comment.id }}"
-        />
-        <input type='submit' value='Submit' id='{{ post.id }}_btn'>
-      </form>
-    </div>
-    {% endif %}
-    <br />
-  
-    {% for comment in comment.children.all %} 
-      {% include 'comments/comment_component.html' %} 
-    {% endfor %}
-  </div>
-  
+        {{ comment.user }}
+        <span style="font-size: 0.6em"> commented {{ comment.get_date }}</span>
+        </a>
+        {% if request.user.id == comment.user.id %}
+        <div class='post-delete-form'>
+            <form id="my_form" method="POST" action="{% url 'comment-delete' comment.id %}">
+                {% csrf_token %}
+            </form>
+            <small><a href="#" onclick="document.getElementById('my_form').submit();">Delete?</a></small>
+        </div>
+        {% endif %}
+        <br />
+        {{ comment.content}} 
+        {% if user.is_authenticated %}
+        <div class="form-group">
+          <form action="{% url 'new-comment' %}" method="POST">
+            {% csrf_token %}
+            <input
+              class="form-control"
+              type="text"
+              name="comment"
+              placeholder="Reply to the comment above...."
+            />
+            <input
+              type="hidden"
+              id="postId"
+              name="postId"
+              value="{{ post.id }}"
+            />
+            <input
+              type="hidden"
+              id="parentId"
+              name="parentId"
+              value="{{ comment.id }}"
+            />
+            <input type='submit' value='Submit' id='{{ post.id }}_btn'>
+          </form>
+        </div>
+        {% endif %}
+        <br />
+      
+        {% for comment in comment.children.all %} 
+          {% include 'comments/comment_component.html' %} 
+        {% endfor %}
+      </div>
+      

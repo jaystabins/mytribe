@@ -6,7 +6,7 @@
         <div>
           <div>
             <ul>
-              {% if user.is_authenticated %}
+              {% if request.user.is_authenticated %}
               <li><a href="{% url 'account_email' %}">Change E-mail</a></li>
               <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
               <li><a href="{% url 'user' request.user.id %}">Profile</a></li>
@@ -15,7 +15,6 @@
               <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
               {% endif %}
             <ul>
-            {% comment %} <a href="{% url 'post-list' %}">Posts</a> {% endcomment %}
           </div>
         </div>
     </nav>

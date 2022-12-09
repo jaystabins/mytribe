@@ -57,7 +57,7 @@ class User(PermissionsMixin, AbstractBaseUser):
     objects = UserManager()
 
     def __str__(self):
-        return f"{self.user_name}'s Profile"
+        return self.user_name
 
     def get_absolute_url(self):
         return reverse("user", kwargs={"pk": self.pk})

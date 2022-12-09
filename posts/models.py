@@ -13,7 +13,7 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now=True)
 
     def get_date(self):
-        return humanize.naturaltime(self.postCreated)
+        return humanize.naturaltime(self.created_at)
 
     def get_success_url(self):
         return reverse_lazy("post-list", kwargs={"pk": self.object.pk})

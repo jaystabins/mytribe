@@ -1,17 +1,21 @@
-<div class='container'>
+<div class='navbar'>
     <nav>
-        <a href="/"><span class="">My TRIBE</span></a>
-        <div class='' id="">
-          <div class="">
-            {% if user.is_authenticated %}
-            <a class="" href="{% url 'account_email' %}">Change E-mail</a>
-            <a class="" href="{% url 'account_logout' %}">Sign Out</a>
-            <a class="" href="{% url 'user' request.user.id %}">Profile</a>
-            {% else %}
-            <a class="" href="{% url 'account_login' %}">Sign In</a>
-            <a class="" href="{% url 'account_signup' %}">Sign Up</a>
-            {% endif %}
-            {% comment %} <a class="" href="{% url 'post-list' %}">Posts</a> {% endcomment %}
+      <div class='brand'>
+        <a href="/"><span >My TRIBE</span></a>
+      </div>
+        <div>
+          <div>
+            <ul>
+              {% if user.is_authenticated %}
+              <li><a href="{% url 'account_email' %}">Change E-mail</a></li>
+              <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
+              <li><a href="{% url 'user' request.user.id %}">Profile</a></li>
+              {% else %}
+              <li><a href="{% url 'account_login' %}">Sign In</a></li>
+              <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
+              {% endif %}
+            <ul>
+            {% comment %} <a href="{% url 'post-list' %}">Posts</a> {% endcomment %}
           </div>
         </div>
     </nav>

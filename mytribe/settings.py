@@ -5,7 +5,6 @@ import environ
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False),
-    ALLOWED_HOSTS=(list),
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -18,7 +17,7 @@ SECRET_KEY = env("SECRET_KEY")
 
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = env("ALLOWED_HOSTS")
+ALLOWED_HOSTS = env("ALLOWED_HOSTS").split(" ")
 
 # Application definition
 
@@ -167,7 +166,7 @@ LOGIN_REDIRECT_URL = "/"
 DATABASES = {
     "default": {
         "ENGINE": env("DB"),
-        "NAME": env("DB_URL"),
+        "NAME": env("DB_NAME"),
         "HOST": env("DB_HOST"),
         "PORT": env("DB_PORT"),
         "USER": env("DB_USER"),

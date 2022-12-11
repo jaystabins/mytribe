@@ -42,6 +42,7 @@ class User(PermissionsMixin, AbstractBaseUser):
     hometown = models.CharField(max_length=256, blank=True)
     profile_pic = models.ImageField(default=settings.PLACEHOLDER_PROFILE_IMAGE)
     post_public = models.BooleanField(default=True)
+    friends = models.ManyToManyField("User", blank=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
@@ -61,9 +62,9 @@ class User(PermissionsMixin, AbstractBaseUser):
         return reverse("user", kwargs={"pk": self.pk})
 
 
-class Friend(models.Model):
-    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="friends")
-    from_user = models.ForeignKey(User, on_delete=models.CASCADE)
+class Friend_Request(models.Model):
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="to_user")
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="from_user")
     requested_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):

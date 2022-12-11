@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import CreateView, ListView, DeleteView, UpdateView, DetailView
+from django.views.generic import CreateView, ListView, DeleteView, UpdateView, DetailView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Image, ImageAlbum
 from django.shortcuts import get_object_or_404
@@ -7,10 +7,9 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 
 
-class ImageListView(LoginRequiredMixin, ListView):
+class ImageListView(LoginRequiredMixin, TemplateView):  # ListView needed for pagination?
     model = Image
     template_name = "images/gallery.html"
-    context_object_name = "images"
     paginate_by = 5
 
     def get_context_data(self, *args, **kwargs):
@@ -29,15 +28,6 @@ class ImageDetailView(LoginRequiredMixin, DetailView):
     model = Image
     template_name = "images/view_photo.html"
 
-    def get_queryset(self):
-        self.user = get_object_or_404(Image, id=self.kwargs["pk"])
-        return Image.objects.filter(pk=self.kwargs["pk"])
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["image"] = Image.objects.get(id=self.kwargs["pk"])
-        return context
-
 
 class ImageCreateView(LoginRequiredMixin, CreateView):
     model = Image
@@ -47,9 +37,13 @@ class ImageCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        if form.is_valid():
-            item = form.save()
-            return redirect("image-gallery")
+        form.save()
+        return redirect("image-gallery")
+
+    def get_form(self):
+        form = super().get_form()
+        form.fields["album"].queryset = ImageAlbum.objects.filter(user=self.request.user)
+        return form
 
 
 class ImageDeleteView(LoginRequiredMixin, DeleteView):
@@ -65,10 +59,9 @@ class AlbumCreateView(LoginRequiredMixin, CreateView):
     fields = ["name"]
 
     def form_valid(self, form):
-        print("here")
         form.instance.user = self.request.user
         if form.is_valid():
             return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy("image-gallery")
+        return reverse_lazy("image-upload")

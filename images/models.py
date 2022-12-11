@@ -4,11 +4,13 @@ from users.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_delete, post_save
 from django.conf import settings
+from django.template.defaultfilters import slugify
 
-
+# SLUGIFY THE CATEGORY or NOT because I think multiple people would potentiall have a same album?
 class ImageAlbum(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # slug = models.SlugField(null=True)
     created_at = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -16,6 +18,11 @@ class ImageAlbum(models.Model):
 
     def __str__(self):
         return self.name
+
+    # def save(self, *args, **kwargs):
+    #     if not self.slug:
+    #         self.slug = slugify(self.name)
+    #     return super().save(*args, **kwargs)
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
@@ -53,10 +60,14 @@ class Image(models.Model):
 @receiver(post_delete, sender=Image)
 def delete_image_file(sender, instance, **kwargs):
     if instance.is_user_profile:
-        print(instance.user.id)
         user = User.objects.get(id=instance.user.id)
         user.profile_pic = settings.PLACEHOLDER_PROFILE_IMAGE
         user.save()
+
+    # Clean up Album if all files in the album are deleted
+    if instance.album is not None:
+        if Image.objects.filter(album=instance.album.id, user=instance.user).count() == 0:
+            ImageAlbum.objects.get(id=instance.album.id, user=instance.user).delete()
 
     instance.image.delete(False)
 

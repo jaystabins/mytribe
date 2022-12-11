@@ -8,6 +8,7 @@ env = environ.Env(
     EMAIL_USE_SSL=(bool, False),
     EMAIL_USE_TLS=(bool, False),
     AWS_S3_VERIFY=(bool, False),
+    AWS_S3_FILE_OVERWRITE=(bool, False),
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -208,5 +209,5 @@ AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
 AWS_S3_SIGNATURE_VERSION = env("AWS_S3_SIGNATURE_VERSION")
 AWS_S3_REGION_NAME = env("AWS_S3_REGION_NAME")
 AWS_S3_FILE_OVERWRITE = env("AWS_S3_FILE_OVERWRITE")
-AWS_DEFAULT_ACL = env("AWS_DEFAULT_ACL")
+AWS_DEFAULT_ACL = None  # env("AWS_DEFAULT_ACL")
 AWS_S3_VERIFY = env("AWS_S3_VERIFY")

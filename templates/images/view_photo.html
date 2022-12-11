@@ -1,0 +1,18 @@
+{% extends 'base.html' %} 
+{% block content %} 
+<a href="{{request.META.HTTP_REFERER}}">Go back</a>
+<div>
+    <img src='{{ image.image.url }}'/>
+</div>
+<div>
+    {% if request.user.id == image.user.id %}
+    <div class='post-delete-form'>
+        <form id="delete-image-form" method="POST" action="{% url 'image-delete' image.id %}">
+            {% csrf_token %}
+        </form>
+        <small><a href="#" onclick="document.getElementById('delete-image-form').submit();">Delete?</a></small>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock content %}

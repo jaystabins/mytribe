@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from django.core.exceptions import ValidationError
+from django.conf import settings
 
 
 class UserManager(BaseUserManager):
@@ -39,7 +40,7 @@ class User(PermissionsMixin, AbstractBaseUser):
     bio = models.TextField(blank=True)
     current_location = models.CharField(max_length=256, blank=True)
     hometown = models.CharField(max_length=256, blank=True)
-    profile_pic = models.ImageField(upload_to="media/images/", default="media/images/blank_profile_pic.png")
+    profile_pic = models.ImageField(default=settings.PLACEHOLDER_PROFILE_IMAGE)
     post_public = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -47,9 +48,6 @@ class User(PermissionsMixin, AbstractBaseUser):
     is_admin = models.BooleanField(default=False)
     last_login = models.DateTimeField(verbose_name="last login", auto_now=True)
     date_joined = models.DateTimeField(auto_now_add=True)
-    # ########################
-    # Need to add SOCIAL links
-    # ########################
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["user_name"]

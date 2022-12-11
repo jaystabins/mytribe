@@ -1,0 +1,14 @@
+{% extends 'base.html' %} 
+{% block content %} 
+<a href="{{request.META.HTTP_REFERER}}">Go back</a>
+<form id="" method="POST" action="{% url 'create-album' %}">
+    {% csrf_token %}
+    <input type='text' name='name' placeholder='create a new album'>
+    <input type='submit' value='submit'/>
+</form>
+<form id="" method="POST" action="{% url 'image-upload' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type='submit' value='submit'/>
+</form>
+{% endblock content %}

@@ -19,7 +19,7 @@ class Post(models.Model):
         return reverse_lazy("post-list", kwargs={"pk": self.object.pk})
 
     def __str__(self):
-        return self.user
+        return self.user.user_name
 
     # TODO - This gets called a TON while viewing any feed
     #       Currently needed to link profile to user on post display

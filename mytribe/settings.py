@@ -7,6 +7,7 @@ env = environ.Env(
     DEBUG=(bool, False),
     EMAIL_USE_SSL=(bool, False),
     EMAIL_USE_TLS=(bool, False),
+    AWS_S3_VERIFY=(bool, False),
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -36,6 +37,8 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "django.contrib.sites",
+    # django-storages for AWS S3
+    "storages",
     # mytribe Apps
     "users",
     "comments",
@@ -114,20 +117,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
-STATIC_URL = "/static/"
-
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
-
-# Image Directory for user uplaods
-MEDIA_ROOT = BASE_DIR / "media"
-MEDIA_URL = "/media/"
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -188,3 +177,36 @@ EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = env("EMAIL_USE_TLS")
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
+
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/4.1/howto/static-files/
+
+STATIC_URL = "/static/"
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
+# Image Directory for user uplaods
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "/media/"
+
+
+# AWS S3 Storage
+# Requires boto3 and django-storages packages
+
+# Default profile and cover images
+PLACEHOLDER_PROFILE_IMAGE = "placeholder_profile_image.png"
+PLACEHOLDER_COVER_IMAGE = "placeholder_cover_image.png"
+
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"  # boto3
+
+AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_SIGNATURE_VERSION = env("AWS_S3_SIGNATURE_VERSION")
+AWS_S3_REGION_NAME = env("AWS_S3_REGION_NAME")
+AWS_S3_FILE_OVERWRITE = env("AWS_S3_FILE_OVERWRITE")
+AWS_DEFAULT_ACL = env("AWS_DEFAULT_ACL")
+AWS_S3_VERIFY = env("AWS_S3_VERIFY")

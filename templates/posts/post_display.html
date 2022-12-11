@@ -16,7 +16,7 @@
     <div class="infinite-item" style="" id='{{ post.id }}'>
         <div class='post-display-user'>
             <a href='{% url "user" post.user.id %}' class="container">
-                <img class='profile-pic' src='../{{ MEDIA_URL }}{{ post.user.profile_pic }}'>
+                <img class='profile-pic' src='{{ post.user.profile_pic.url }}'>
                 {{ post.user }}
                 <span style="font-size: 0.6em"> posted {{ post.get_date }}</span>
             </a>
@@ -29,7 +29,9 @@
             </div>
             {% endif %}
         </div>
+        <div class='post-content'>
         {{ post.post }} 
+        </div>
         {% if user.is_authenticated %}
             <div class="form-group">
                 <form id='comment_form' action="{% url 'new-comment' %}" method="POST"> 

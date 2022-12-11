@@ -16,6 +16,7 @@ urlpatterns = [
     path("post/<int:pk>/delete", PostDeleteView.as_view(), name="post-delete"),
     path("user/<int:pk>", UserDetailView.as_view(), name="user"),
     path("user/edit", UserEditView.as_view(), name="user-edit"),
+    path("images/", include("images.urls")),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

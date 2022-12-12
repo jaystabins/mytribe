@@ -5,8 +5,6 @@ from django.contrib.humanize.templatetags import humanize
 from django.urls import reverse_lazy
 
 
-# TODO Expand on Manager, clean up queries for nested comments
-# Currently tied to main post list and commment component
 class CommentManager(models.Manager):
     def all(self):
         qs = super(CommentManager, self).filter(parent=None)

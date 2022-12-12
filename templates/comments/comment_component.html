@@ -12,9 +12,10 @@
             <small><a href="#" onclick="document.getElementById('my_form').submit();">Delete?</a></small>
         </div>
         {% endif %}
-        <br />
-        {{ comment.content}} 
-        {% if user.is_authenticated %}
+        <div>
+          {{ comment.content}} 
+        </div>
+        {% if request.user.is_authenticated %}
         <div class="form-group">
           <form action="{% url 'new-comment' %}" method="POST">
             {% csrf_token %}

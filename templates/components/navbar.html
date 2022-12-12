@@ -3,19 +3,20 @@
       <div class='brand'>
         <a href="/"><span >My TRIBE</span></a>
       </div>
-        <div>
-          <div>
-            <ul>
-              {% if request.user.is_authenticated %}
-              <li><a href="{% url 'account_email' %}">Change E-mail</a></li>
-              <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
-              <li><a href="{% url 'user' request.user.id %}">Profile</a></li>
-              {% else %}
-              <li><a href="{% url 'account_login' %}">Sign In</a></li>
-              <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
-              {% endif %}
-            <ul>
+      {% if request.user.is_authenticated %}
+        <div class="dropdown">
+          <a href="{% url 'user' request.user.id %}"><img class='profile-pic ' src='{{ request.user.profile_pic.url }}'></a>
+          <div class="dropdown-content">
+            <a href="{% url 'user' request.user.id %}">Profile</a>
+            <a href="{% url 'image-gallery' request.user.id %}">Pictures</a>
+            <a href="{% url 'account_logout' %}">Logout</a>
+            <a href="{% url 'account_email' %}">Change E-mail</a>
+            <a href="{% url 'account_change_password' %}">Change Password</a>
           </div>
         </div>
+      {% else %}
+      <a href="{% url 'account_login' %}">Sign In</a>
+      <a href="{% url 'account_signup' %}">Sign Up</a>
+      {% endif %}
     </nav>
 </div>

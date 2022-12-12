@@ -1,14 +1,15 @@
 {% extends 'base.html' %} 
 {% block content %} 
-
 <div class="image-nav">
     <ul>
-        <li><a href="{% url 'image-gallery' %}">All</a></li>
+        <li><a href="{% url 'image-gallery' context_user.id %}">All</a></li>
         <!-- for loop for each category -->
         {% for album in albums %}
-        <li><a href="{% url 'image-gallery' album.id %}">{{ album.name }}</a></li>
+        <li><a href="{% url 'image-gallery' album.user_id album.slug %}">{{ album.name }}</a></li>
         {% endfor %}
+        {% if request.user.id == context_user.id %}
         <li><a href="{% url 'image-upload' %}">Add Photo</a></li>
+        {% endif %}
     </ul>
 </div>
 <div class="image-gallery">

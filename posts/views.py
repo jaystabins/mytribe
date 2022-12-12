@@ -22,12 +22,8 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        if form.is_valid():
-            item = form.save()
-            return redirect("main-feed")
-        #     return JsonResponse({"name": self.request.user.user_name}, status=200)
-        # else:
-        #     return JsonResponse({"error": form.errors}, status=400)
+        form.save()
+        return redirect("main-feed")
 
 
 class PostDeleteView(LoginRequiredMixin, DeleteView):

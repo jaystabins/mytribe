@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView, DetailView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Image, ImageAlbum
-from django.shortcuts import get_object_or_404
+from users.models import User
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 
@@ -14,13 +14,17 @@ class ImageListView(LoginRequiredMixin, TemplateView):  # ListView needed for pa
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["albums"] = ImageAlbum.objects.filter(user=self.request.user)
-        if "pk" in self.kwargs:
-            context["images"] = Image.objects.filter(user_id=self.request.user, album=self.kwargs["pk"]).order_by(
+
+        context["context_user"] = User.objects.get(id=self.kwargs["pk"])
+        context["albums"] = ImageAlbum.objects.filter(user=self.kwargs["pk"])
+
+        if "slug" in self.kwargs:
+            slug_album = ImageAlbum.objects.get(user=self.kwargs["pk"], slug=self.kwargs["slug"])
+            context["images"] = Image.objects.filter(user_id=self.kwargs["pk"], album=slug_album).order_by(
                 "-created_at"
             )
         else:
-            context["images"] = Image.objects.filter(user_id=self.request.user).order_by("-created_at")
+            context["images"] = Image.objects.filter(user_id=context["context_user"]).order_by("-created_at")
         return context
 
 
@@ -38,7 +42,7 @@ class ImageCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         form.save()
-        return redirect("image-gallery")
+        return redirect("image-gallery", self.request.user.id)
 
     def get_form(self):
         form = super().get_form()
@@ -50,7 +54,7 @@ class ImageDeleteView(LoginRequiredMixin, DeleteView):
     model = Image
 
     def get_success_url(self):
-        return reverse_lazy("image-gallery")
+        return reverse_lazy("image-gallery", self.request.user.id)
 
 
 class AlbumCreateView(LoginRequiredMixin, CreateView):

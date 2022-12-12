@@ -9,7 +9,7 @@
 <img class='profile-pic' src='{{ user.profile_pic.url }}'>
 <div>
     <div>
-        <a href="{% url 'image-gallery' %}">View Images</a>
+        <a href="{% url 'image-gallery' user_data.id %}">View Images</a>
     </div>
     <span>First Name: {{ user_data.first_name}}</span> <br>
     <span>Last Name: {{ user_data.last_name}}</span> <br>

@@ -10,7 +10,7 @@ from django.template.defaultfilters import slugify
 class ImageAlbum(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # slug = models.SlugField(null=True)
+    slug = models.SlugField(null=True, blank=True, max_length=100)
     created_at = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -19,17 +19,17 @@ class ImageAlbum(models.Model):
     def __str__(self):
         return self.name
 
-    # def save(self, *args, **kwargs):
-    #     if not self.slug:
-    #         self.slug = slugify(self.name)
-    #     return super().save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        return super().save(*args, **kwargs)
 
 
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_image(sender, instance, created, **kwargs):
-    if created:
-        usr = User.objects.get(id=instance.id)
-        ImageAlbum.objects.create(name="Profile Pictures", user=usr)
+# @receiver(post_save, sender=settings.AUTH_USER_MODEL)
+# def create_image(sender, instance, created, **kwargs):
+#     if created:
+#         usr = User.objects.get(id=instance.id)
+#         ImageAlbum.objects.create(name="Profile Pictures", user=usr)
 
 
 class Image(models.Model):
@@ -49,12 +49,6 @@ class Image(models.Model):
 
     def get_absolute_url(self):
         return reverse("image-detail", kwargs={"pk": self.pk})
-
-    def get_user_profile(self, *args, **kwargs):
-        try:
-            return self.get(is_user_profile=True)
-        except Image.DoesNotExist:
-            return None
 
 
 @receiver(post_delete, sender=Image)
@@ -76,7 +70,8 @@ def delete_image_file(sender, instance, **kwargs):
 def create_profile_image(sender, instance, created, **kwargs):
     if not created:
         # get Profile Pic Album
-        album = ImageAlbum.objects.filter(name="Profile Pictures", user=instance.id).first()
+        album, created = ImageAlbum.objects.get_or_create(name="Profile Pictures", user=instance)
+
         if instance.profile_pic != settings.PLACEHOLDER_PROFILE_IMAGE:
 
             # Query to find if there is a current profile picture set for the user

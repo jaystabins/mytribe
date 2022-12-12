@@ -6,7 +6,7 @@ from django.db.models.signals import post_delete, post_save
 from django.conf import settings
 from django.template.defaultfilters import slugify
 
-# SLUGIFY THE CATEGORY or NOT because I think multiple people would potentiall have a same album?
+
 class ImageAlbum(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -23,13 +23,6 @@ class ImageAlbum(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
-
-
-# @receiver(post_save, sender=settings.AUTH_USER_MODEL)
-# def create_image(sender, instance, created, **kwargs):
-#     if created:
-#         usr = User.objects.get(id=instance.id)
-#         ImageAlbum.objects.create(name="Profile Pictures", user=usr)
 
 
 class Image(models.Model):

@@ -1,128 +1,16 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    {% load static %}
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.js"
-      integrity="sha512-ZKNVEa7gi0Dz4Rq9jXcySgcPiK+5f01CqW+ZoKLLKr9VMXuCsw3RjWiv8ZpIOa0hxO79np7Ec8DDWALM0bDOaQ=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
-    <script
-      type="text/javascript"
-      src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/shortcuts/infinite.min.js"
-    ></script>
-
-    <link rel="stylesheet" href="" />
-    <style>
-      a {
-        color: #bebebe;
-      }
-      .profile-pic {
-        display: inline-block;
-        width: 35px;
-        height: 35px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-top: 15px;
-      }
-      body {
-        max-width: 70ch;
-        padding: 0 1rem;
-        margin: auto;
-        line-height: 1.5;
-        height: 100%;
-        font-family: Arial, Tahoma, Serif;
-        color: #bebebe;
-        background-color: rgb(46, 46, 46);
-      }
-      .navbar {
-        position: sticky;
-        top: 0;
-        border-bottom: 1px solid;
-        color: #bebebe;
-        background-color: rgb(46, 46, 46);
-      }
-      nav {
-        display: flex;
-        justify-content: space-between;
-      }
-      nav a {
-        text-decoration: none;
-      }
-      /* The container <div> - needed to position the dropdown content */
-      .dropdown {
-        position: relative;
-        display: inline-block;
-      }
-
-      /* Dropdown Content (Hidden by Default) */
-      .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #f9f9f9;
-        min-width: 160px;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        z-index: 1;
-      }
-
-      /* Links inside the dropdown */
-      .dropdown-content a {
-        color: black;
-        padding: 5px 5px;
-        text-decoration: none;
-        display: block;
-        background-color: #bebebe;
-      }
-
-      /* Change color of dropdown links on hover */
-      .dropdown-content a:hover {background-color: #8e8e8e}
-
-      /* Show the dropdown menu on hover */
-      .dropdown:hover .dropdown-content {
-        display: block;
-      }
-
-      /* Change the background color of the dropdown button when the dropdown content is shown */
-      .dropdown:hover .dropbtn {
-        background-color: #3e8e41;
-      }
-
-      .brand {
-        font-weight: bold;
-        font-size: 20px;
-        margin: 16px 0px;
-        display: flex;
-      }
-      .post-textarea {
-        margin-top: 15px;
-        width:98%;
-        height: 55px;
-      }
-
-      .post-delete-form{
-        float:right;
-      }
-      a {
-        text-decoration: none;
-      } 
-      .post-display-user {
-        padding-top:10px;
-      }
-      .gallery-wrapper {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-      }
-      .gallery-wrapper img {
-        width: 100%;
-      }
-    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.js" integrity="sha512-ZKNVEa7gi0Dz4Rq9jXcySgcPiK+5f01CqW+ZoKLLKr9VMXuCsw3RjWiv8ZpIOa0hxO79np7Ec8DDWALM0bDOaQ==" crossorigin="anonymous"referrerpolicy="no-referrer"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/shortcuts/infinite.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
 
     <title>mytribe</title>
   </head>

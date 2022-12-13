@@ -1,26 +1,84 @@
 {% extends 'base.html' %} 
 {% block content %} 
-
-<h1>{{ user_data.user_name }} Profile</h1>
-
-{% if request.user.id == user_data.id %}
-    <h3><a href='{% url "user-edit"%}'>You can Edit</a></h3>
-{% endif %}
-<img class='profile-pic' src='{{ user.profile_pic.url }}'>
-<div>
-    <div>
-        <a href="{% url 'image-gallery' user_data.id %}">View Images</a>
-    </div>
-    <span>First Name: {{ user_data.first_name}}</span> <br>
-    <span>Last Name: {{ user_data.last_name}}</span> <br>
-    <span>Email: {{ user_data.email}}</span> <br>
-    <span>Gender: {{ user_data.gender}}</span> <br>
-    <span>Relationship: {{ user_data.relationshiop}}</span> <br>
-    <span>Bio: {{ user_data.bio}}</span> <br>
-    <span>Profile Pic: {{ user_data.profile_pic}}</span> <br>
-    <span>Current Location: {{ user_data.current_location}}</span> <br>
+<div class="profile-header">
+    <h1>{{ user_data.user_name }} Profile</h1>
 </div>
+<div class="profile-flex">
+    <div class="profile-main">
+        {% if request.user.id == user_data.id %}
+            <h3><a href='{% url "user-edit"%}'>You can Edit</a></h3>
+        {% endif %}
+        <img class='profileview-profile-pic' src='{{ user.profile_pic.url }}'>
+        <div>
+            <div>
+                <a href="{% url 'image-gallery' user_data.id %}">View Images</a>
+            </div>
+            <div>First Name: {{ user_data.first_name}}</div>
+            <div>Last Name: {{ user_data.last_name}}</div>
+            <div>Email: {{ user_data.email}}</div>
+            <div>Gender: {{ user_data.gender}}</div>
+            <div>Relationship: {{ user_data.relationshiop}}</div>
+            <div>Bio: {{ user_data.bio}}</div>
+            <div>Profile Pic: {{ user_data.profile_pic}}</div>
+            <div>Current Location: {{ user_data.current_location}}</div>
+        </div>
+    </div>
+    <div class="profile-sidebar">
+        <div>Friends ( {{ friend_list.friends.all.count }} )</div>
+        {% if request.user in friend_list.friends.all and request.user.id != user_data.id %}
+            <div>We be Friends</div>
+        {% endif %}
+        {% for usr in friend_list.friends.all %}
+            <div><a href="{% url 'user' usr.id %}">{{usr}}</a></div>
+        {% endfor %}
+        {% if request.user.is_authenticated %}
+        {% if friend_request_sent and request.user.id != user_data.id %}
+            <div>
+                Pending Request
+                <a href="{% url 'cancel-friend-request' user_data.id request.user.id %}">
+                    <i class="fa-solid fa-square-xmark danger"></i>
+                </a> 
+            </div>
+        {% endif %}
+        {% if not friend_request_sent and request.user.id != user_data.id %}
+            {% if have_pending_request %}
+                <a class='' href="{% url 'accept-friend-request' user_data.id user_data.id %}">Accept Friend Request</a>
+            {% else %}
+                <a href="{% url 'send-friend-request' user_data.id %}">Send Friend Request</a>
+            {% endif %}
+            
+        {% endif %}
 
+        {% if friend_requests and request.user.id == user_data.id %}
+            <hr>
+            <div>Friend Requests</div>
+            {% for req in friend_requests %}
+                <div>
+                    <a href="{% url 'decline-friend-request' req.id user_data.id %}">
+                        <i class="fa-solid fa-square-xmark danger"></i>
+                    </a> 
+                    <a href="{% url 'accept-friend-request' req.id user_data.id %}">
+                        <i class="fa-solid fa-square-check good"></i>
+                    </a> 
+                    {{req}}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% if friend_requests_pending and request.user.id == user_data.id %}
+        <hr>
+        <div>Pending Requests 3</div>
+        {% for req in friend_requests_pending %}
+            <div>
+                <a href="{% url 'cancel-friend-request' req.id user_data.id%}">
+                    <i class="fa-solid fa-square-xmark danger"></i>
+                </a> 
+                {{req.reciever}}
+            </div>
+        {% endfor %}
+        {% endif %}
+    {% endif %}
+    </div>
+</div>
 <hr>
 {% include '../posts/post_display.html' %}
 {% endblock content %}

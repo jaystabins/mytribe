@@ -3,6 +3,7 @@
       <div class='brand'>
         <a href="/"><span >My TRIBE</span></a>
       </div>
+      <div class='push'>
       {% if request.user.is_authenticated %}
         <div class="dropdown">
           <a href="{% url 'user' request.user.id %}"><img class='profile-pic ' src='{{ request.user.profile_pic.url }}'></a>
@@ -15,8 +16,9 @@
           </div>
         </div>
       {% else %}
-      <a href="{% url 'account_login' %}">Sign In</a>
-      <a href="{% url 'account_signup' %}">Sign Up</a>
+        <a href="{% url 'account_login' %}">Sign In</a>
+        <a href="{% url 'account_signup' %}">Sign Up</a>        
+      </div>
       {% endif %}
     </nav>
 </div>

@@ -4,7 +4,18 @@ from django.conf.urls.static import static
 from django.conf import settings
 from posts.views import PostListVeiw, PostCreateView, PostDeleteView
 from comments.views import createComment, CommentDeleteView
-from users.views import UserDetailView, UserEditView
+from users.views import (
+    UserDetailView,
+    UserEditView,
+    FriendRequestSend,
+    FriendRequestCancel,
+    FriendRequestAccept,
+    FriendRequestDecline,
+    FriendAdd,
+    FriendRemove,
+    FriendUnfriend,
+)
+
 
 urlpatterns = [
     path("accounts/", include("allauth.urls")),
@@ -16,6 +27,17 @@ urlpatterns = [
     path("post/<int:pk>/delete", PostDeleteView.as_view(), name="post-delete"),
     path("user/<int:pk>", UserDetailView.as_view(), name="user"),
     path("user/edit", UserEditView.as_view(), name="user-edit"),
+    path("user/<int:pk>/sendFriendRequest", FriendRequestSend.as_view(), name="send-friend-request"),
+    path("user/<int:pk>/CancelFriendRequest/<int:return>", FriendRequestCancel.as_view(), name="cancel-friend-request"),
+    path("user/<int:pk>/AcceptFriendRequest/<int:return>", FriendRequestAccept.as_view(), name="accept-friend-request"),
+    path(
+        "user/<int:pk>/DeclinelFriendRequest/<int:return>",
+        FriendRequestDecline.as_view(),
+        name="decline-friend-request",
+    ),
+    path("user/<int:pk>/FriendAdd", FriendAdd.as_view(), name="friend-add"),
+    path("user/<int:pk>/FriendRemove", FriendRemove.as_view(), name="friend-remove"),
+    path("user/<int:pk>/FriendUnfriend", FriendUnfriend.as_view(), name="friend-unfriend"),
     path("images/", include("images.urls")),
 ]
 if settings.DEBUG:

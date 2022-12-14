@@ -32,53 +32,109 @@
             <div><a href="{% url 'user' usr.id %}">{{usr}}</a></div>
         {% endfor %}
         {% if request.user.is_authenticated %}
-        {% if friend_request_sent and request.user.id != user_data.id %}
-            <div>
-                Pending Request
-                <a href="{% url 'cancel-friend-request' user_data.id request.user.id %}">
-                    <i class="fa-solid fa-square-xmark danger"></i>
-                </a> 
-            </div>
-        {% endif %}
-        {% if not friend_request_sent and request.user.id != user_data.id %}
-            {% if have_pending_request %}
-                <a class='' href="{% url 'accept-friend-request' user_data.id user_data.id %}">Accept Friend Request</a>
-            {% else %}
-                <a href="{% url 'send-friend-request' user_data.id %}">Send Friend Request</a>
+            {% if friend_request_sent and request.user.id != user_data.id %}
+                <div>
+                    Pending Request
+                    <a href="{% url 'cancel-friend-request' user_data.id request.user.id %}">
+                        <i class="fa-solid fa-square-xmark danger"></i>
+                    </a>
+                </div>
             {% endif %}
-            
-        {% endif %}
+            {% if friend_request_sent and request.user.id != user_data.id %}
+                {% if have_pending_request %}
+                    <a class='' href="{% url 'accept-friend-request' user_data.id request.user.id %}">Accept Friend Request</a>
+                {% elif request.user.id not in freind_list.friends.all %}
+                    <a href="{% url 'send-friend-request' user_data.id %}">Send Friend Request</a>
+                {% endif %}
+            {% endif %}
 
         {% if friend_requests and request.user.id == user_data.id %}
             <hr>
-            <div>Friend Requests</div>
+            <div>Friend Requests!</div>
             {% for req in friend_requests %}
                 <div>
-                    <a href="{% url 'decline-friend-request' req.id user_data.id %}">
+                    <a href="{% url 'decline-friend-request' user_data.id req.sender_id %}">
                         <i class="fa-solid fa-square-xmark danger"></i>
                     </a> 
-                    <a href="{% url 'accept-friend-request' req.id user_data.id %}">
+                    <a href="{% url 'accept-friend-request' user_data.id req.sender_id %}">
                         <i class="fa-solid fa-square-check good"></i>
                     </a> 
                     {{req}}
                 </div>
             {% endfor %}
         {% endif %}
-        {% if friend_requests_pending and request.user.id == user_data.id %}
-        <hr>
-        <div>Pending Requests 3</div>
-        {% for req in friend_requests_pending %}
-            <div>
-                <a href="{% url 'cancel-friend-request' req.id user_data.id%}">
-                    <i class="fa-solid fa-square-xmark danger"></i>
-                </a> 
-                {{req.reciever}}
-            </div>
-        {% endfor %}
+
         {% endif %}
-    {% endif %}
     </div>
 </div>
 <hr>
 {% include '../posts/post_display.html' %}
 {% endblock content %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} 
+<!-- -- NOT SELF PAGE -- -->
+{% if request.user.id != user_data.id %}
+    {% if friend_request_active and request.user.id not in freind_list.friends.all %}
+        <div>
+            Pending Request
+            <a href="{% url 'cancel-friend-request' user_data.id request.user.id %}">
+                <i class="fa-solid fa-square-xmark danger"></i>
+            </a>
+        </div>
+    {% elif request.user.id not in freind_list.friends.all %}
+        <a href="{% url 'send-friend-request' user_data.id %}">Send Friend Request</a>
+    {% endif %}
+{% else %}
+<!-- SELF PAGE VIEW -->
+    {% if friend_requests %}
+        <hr>
+        <div>Friend Requests!</div>
+        {% for req in friend_requests %}
+            <div>
+                <a href="{% url 'decline-friend-request' user_data.id req.sender_id %}">
+                    <i class="fa-solid fa-square-xmark danger"></i>
+                </a> 
+                <a href="{% url 'accept-friend-request' user_data.id req.sender_id %}">
+                    <i class="fa-solid fa-square-check good"></i>
+                </a> 
+                {{req}}
+            </div>
+        {% endfor %}
+    {% endif %}
+    -- SHOW ALL FRIENDS --
+    <!-- Friend Count -->
+    <div>Friends ( {{ friend_list.friends.all.count }} )</div>
+    {% for usr in friend_list.friends.all %}
+        <div><a href="{% url 'user' usr.id %}">{{usr}}</a></div>
+    {% endfor %}
+    
+    SHOW INCOMING REQUEST
+
+    SHOW OUTGOING REQUESTS
+{% endif %}
+
+
+ {% endcomment %}
+
+
+
+

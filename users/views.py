@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
-class UserDetailView(DetailView):
+class UserDetailView(LoginRequiredMixin, DetailView):
     template_name = "users/user_profile.html"
 
     def get_queryset(self):
@@ -24,7 +24,10 @@ class UserDetailView(DetailView):
         context["friend_list"] = FriendList.objects.get(user=self.user)
         context["friend_requests"] = FriendRequest.objects.filter(reciever_id=self.user.id, is_active=True)
         context["friend_request_sent"] = FriendRequest.objects.filter(
-            reciever_id=self.user.id, sender_id=self.request.user.id
+            reciever_id=self.user.id, sender_id=self.request.user.id, is_active=True
+        ).exists()
+        context["friend_request_active"] = FriendRequest.objects.filter(
+            reciever_id=self.user.id, sender_id=self.request.user.id, is_active=True
         ).exists()
         context["have_pending_request"] = FriendRequest.objects.filter(
             reciever_id=self.request.user.id, sender_id=self.user.id, is_active=True
@@ -65,9 +68,11 @@ class FriendRequestAccept(LoginRequiredMixin, RedirectView):
     pattern_name = "user"
 
     def get_redirect_url(self, *args, **kwargs):
-        request_row = User.objects.get(id=self.kwargs["pk"])
-        FriendRequest.objects.get(id=request_row.id).accept()
-        return super().get_redirect_url(self.kwargs["return"])
+        FriendRequest.objects.get(
+            reciever_id=User.objects.get(id=self.kwargs['reciever_id']),
+            sender_id=User.objects.get(id=self.kwargs['sender_id'])).accept()
+
+        return super().get_redirect_url(self.kwargs["sender_id"])
 
 
 class FriendRequestDecline(LoginRequiredMixin, RedirectView):
@@ -75,9 +80,11 @@ class FriendRequestDecline(LoginRequiredMixin, RedirectView):
     pattern_name = "user"
 
     def get_redirect_url(self, *args, **kwargs):
-        request_row = User.objects.get(id=self.kwargs["pk"])
-        FriendRequest.objects.get(id=request_row.id).decline()
-        return super().get_redirect_url(self.kwargs["return"])
+        FriendRequest.objects.get(
+            reciever_id=User.objects.get(id=self.kwargs['reciever_id']),
+            sender_id=User.objects.get(id=self.kwargs['sender_id'])).decline()
+
+        return super().get_redirect_url(self.kwargs["reciever_id"])
 
 
 class FriendRequestCancel(LoginRequiredMixin, RedirectView):
@@ -85,9 +92,11 @@ class FriendRequestCancel(LoginRequiredMixin, RedirectView):
     pattern_name = "user"
 
     def get_redirect_url(self, *args, **kwargs):
-        request_row = User.objects.get(id=self.kwargs["pk"])
-        FriendRequest.objects.get(id=request_row.id).cancel()
-        return super().get_redirect_url(self.kwargs["return"])
+        FriendRequest.objects.get(
+            reciever_id=User.objects.get(id=self.kwargs['sender_id']),
+            sender_id=User.objects.get(id=self.kwargs['reciever_id'])).cancel()
+        
+        return super().get_redirect_url(self.kwargs["sender_id"])
 
 
 class FriendRemove(LoginRequiredMixin, RedirectView):
@@ -98,5 +107,3 @@ class FriendUnfriend(LoginRequiredMixin, RedirectView):
     pass
 
 
-class FriendAdd(LoginRequiredMixin, RedirectView):
-    pass
